@@ -4,7 +4,6 @@ from pathlib import Path
 
 def main():
     sv = load_stored_values()
-    sv.print()
 
 def load_stored_values():
     sv = StoredValue()

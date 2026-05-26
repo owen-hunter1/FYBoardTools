@@ -41,7 +41,8 @@ class StoredValue:
     def load_from_csv(self, path):
         df = pd.read_csv(path) # load whole report
         self.data_df = self.parse_data_from_csv(df)
-        self.output_df = self.to_fyboard_df(self.data_df)
+        self.counts_df = self.get_counts_df(self.data_df)
+        self.dollars_df = self.get_dollars_df(self.data_df)
 
     # parse subdata and extract totals
     def parse_data_from_csv(self, df:pd.DataFrame):
@@ -62,24 +63,78 @@ class StoredValue:
         mask = (df.iloc[:,0:3] != "{null}").all(axis=1) # flag any {nulls}
 
         df = df[mask]
+        
+        # clean data
+        df.iloc[:,4] = pd.to_numeric(df.iloc[:,4], errors="coerce")
 
         return df
     
-    # translate data to fyboard format
-    def to_fyboard_df(self, df:pd.DataFrame):
+    # translate data to counts with pivot table
+    def get_counts_df(self, df:pd.DataFrame):
+        df = df.copy()
         print(df)
         df["FYBoard Account"] = df.iloc[:,2].replace(ACCOUNT_MAP)
         df["FYBoard Location"] = df.iloc[:,0].replace(LOCATION_MAP)
         
-        # todo: create pivot table 
+        df = pd.pivot_table(
+            df,
+            values=df.columns.to_list()[3],
+            index=df.columns.to_list()[6],
+            columns=df.columns.to_list()[5],
+            aggfunc="sum" 
+        )
+
+        df = df.fillna(0)
+
+        for row in OUTPUT_ROWS:
+            if row not in df.index:
+                df.loc[row] = 0
+
+        df = df [[OUTPUT_COLUMNS[0], OUTPUT_COLUMNS[1], OUTPUT_COLUMNS[2], OUTPUT_COLUMNS[3]]]
+        df = df.reindex(OUTPUT_ROWS)
+
+        print(df)
         
         return df
     
-    def print(self):
-        print("Stored Value")
-        print("Data")
-        print(self.data_df)
-        print("Output")
-        print(self.output_df)
-        print(f"Total Count: {self.total_count}")
-        print(f"Total Amount: {self.total_amount}")
+    # translate data to dollars with pivot table
+    def get_dollars_df(self, df:pd.DataFrame):
+        print(df)
+        df = df.copy()
+        df["FYBoard Account"] = df.iloc[:,2].replace(ACCOUNT_MAP)
+        df["FYBoard Location"] = df.iloc[:,0].replace(LOCATION_MAP)
+        
+        df = pd.pivot_table(
+            df,
+            values=df.columns.to_list()[4],
+            index=df.columns.to_list()[6],
+            columns=df.columns.to_list()[5],
+            aggfunc="sum" 
+        )
+
+        df = df.fillna(0)
+
+        for row in OUTPUT_ROWS:
+            if row not in df.index:
+                df.loc[row] = 0
+
+        df = df [[OUTPUT_COLUMNS[0], OUTPUT_COLUMNS[1], OUTPUT_COLUMNS[2], OUTPUT_COLUMNS[3]]]
+        df = df.reindex(OUTPUT_ROWS)
+
+        print(df)
+        
+        return df
+
+
+    # string definition
+    def __str__(self):
+        return (
+            "Stored Value\n"
+            "Data\n"
+            f"{self.data_df}\n"
+            "Output\n"
+            f"{self.output_df}\n"
+            f"Total Count: {self.total_count}\n"
+            f"Total Amount: {self.total_amount}\n"
+        )
+    
