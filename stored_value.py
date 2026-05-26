@@ -33,7 +33,6 @@ class StoredValue:
         self.data_df = pd.DataFrame()
         self.counts_df = pd.DataFrame()
         self.dollars_df = pd.DataFrame()
-        self.output_df = pd.DataFrame(data=0,  index=OUTPUT_ROWS, columns=OUTPUT_COLUMNS)
         self.total_count = 0
         self.total_amount = 0
 
@@ -138,8 +137,6 @@ class StoredValue:
             f"{self.counts_df}\n"
             "Dollars:\n"
             f"{self.dollars_df}\n"
-            "Output:\n"
-            f"{self.output_df}\n"
             f"Total Count: {self.total_count}\n"
             f"Total Amount: {self.total_amount}\n"
         )
