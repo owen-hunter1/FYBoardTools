@@ -37,6 +37,9 @@ class StoredValue:
         self.total_count = 0
         self.total_amount = 0
 
+        # silence fill error, should be explored why this is happening
+        pd.set_option('future.no_silent_downcasting', True)
+
     # loads stored value details from CSVs
     def load_from_csv(self, path):
         df = pd.read_csv(path) # load whole report
@@ -65,6 +68,7 @@ class StoredValue:
         df = df[mask]
         
         # clean data
+        df.iloc[:,3] = pd.to_numeric(df.iloc[:,3], errors="coerce")
         df.iloc[:,4] = pd.to_numeric(df.iloc[:,4], errors="coerce")
 
         return df
@@ -72,34 +76,24 @@ class StoredValue:
     # translate data to counts with pivot table
     def get_counts_df(self, df:pd.DataFrame):
         df = df.copy()
-        print(df)
         df["FYBoard Account"] = df.iloc[:,2].replace(ACCOUNT_MAP)
         df["FYBoard Location"] = df.iloc[:,0].replace(LOCATION_MAP)
-        
+
         df = pd.pivot_table(
             df,
             values=df.columns.to_list()[3],
             index=df.columns.to_list()[6],
             columns=df.columns.to_list()[5],
-            aggfunc="sum" 
+            aggfunc="sum",
+            fill_value=0
         )
 
-        df = df.fillna(0)
+        df = self.clean_pivot(df)
 
-        for row in OUTPUT_ROWS:
-            if row not in df.index:
-                df.loc[row] = 0
-
-        df = df [[OUTPUT_COLUMNS[0], OUTPUT_COLUMNS[1], OUTPUT_COLUMNS[2], OUTPUT_COLUMNS[3]]]
-        df = df.reindex(OUTPUT_ROWS)
-
-        print(df)
-        
         return df
-    
+
     # translate data to dollars with pivot table
     def get_dollars_df(self, df:pd.DataFrame):
-        print(df)
         df = df.copy()
         df["FYBoard Account"] = df.iloc[:,2].replace(ACCOUNT_MAP)
         df["FYBoard Location"] = df.iloc[:,0].replace(LOCATION_MAP)
@@ -109,20 +103,28 @@ class StoredValue:
             values=df.columns.to_list()[4],
             index=df.columns.to_list()[6],
             columns=df.columns.to_list()[5],
-            aggfunc="sum" 
+            aggfunc="sum",
+            fill_value=0
         )
 
-        df = df.fillna(0)
+        df = self.clean_pivot(df)
 
-        for row in OUTPUT_ROWS:
-            if row not in df.index:
-                df.loc[row] = 0
+        return df
 
-        df = df [[OUTPUT_COLUMNS[0], OUTPUT_COLUMNS[1], OUTPUT_COLUMNS[2], OUTPUT_COLUMNS[3]]]
-        df = df.reindex(OUTPUT_ROWS)
-
-        print(df)
+    # clean the df after pivot
+    def clean_pivot(self, df):
+        df = df.copy()
         
+        # remove index name
+        df.index.name = None
+
+        # add missing rows and columns
+        df = df.reindex(index=OUTPUT_ROWS, columns=OUTPUT_COLUMNS, fill_value=0.0)
+        
+        # add totals
+        df["Location Total"] = df.sum(axis=1)
+        df.loc["Total"] = df.sum(axis=0)
+
         return df
 
 
@@ -130,9 +132,13 @@ class StoredValue:
     def __str__(self):
         return (
             "Stored Value\n"
-            "Data\n"
+            "Data:\n"
             f"{self.data_df}\n"
-            "Output\n"
+            "Counts:\n"
+            f"{self.counts_df}\n"
+            "Dollars:\n"
+            f"{self.dollars_df}\n"
+            "Output:\n"
             f"{self.output_df}\n"
             f"Total Count: {self.total_count}\n"
             f"Total Amount: {self.total_amount}\n"
