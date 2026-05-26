@@ -7,6 +7,8 @@ def main():
     print(sv)
 
 def load_stored_values():
+    print("Loading stored values...")
+    
     sv = StoredValue()
     files = glob("./csvs/Tufts_Dining_Weekly_Summary_Stored_Value*.csv")
     if len(files) == 0:

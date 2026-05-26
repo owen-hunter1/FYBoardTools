@@ -87,7 +87,7 @@ class StoredValue:
             fill_value=0
         )
 
-        df = self.clean_pivot(df)
+        df = self.clean_pivot(df, fill_value=0)
 
         return df
 
@@ -103,22 +103,22 @@ class StoredValue:
             index=df.columns.to_list()[6],
             columns=df.columns.to_list()[5],
             aggfunc="sum",
-            fill_value=0
+            fill_value=0.0
         )
 
-        df = self.clean_pivot(df)
+        df = self.clean_pivot(df, fill_value=0.0)
 
         return df
 
     # clean the df after pivot
-    def clean_pivot(self, df):
+    def clean_pivot(self, df, fill_value):
         df = df.copy()
         
         # remove index name
         df.index.name = None
 
         # add missing rows and columns
-        df = df.reindex(index=OUTPUT_ROWS, columns=OUTPUT_COLUMNS, fill_value=0.0)
+        df = df.reindex(index=OUTPUT_ROWS, columns=OUTPUT_COLUMNS, fill_value=fill_value)
         
         # add totals
         df["Location Total"] = df.sum(axis=1)
