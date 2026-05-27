@@ -6,8 +6,8 @@ Version: 1.0
 Description: This loads information relevant to fyboard from payment details and payment summaries from email containing pdf or pdf and exports it to a csv
 """
 
-from payment_detail import PaymentDetail
-from payment_summary import PaymentSummary
+from report_tools.payment_detail import PaymentDetail
+from report_tools.payment_summary import PaymentSummary
 
 import pandas as pd
 

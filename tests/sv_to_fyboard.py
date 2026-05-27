@@ -1,4 +1,4 @@
-from stored_value import StoredValue
+from report_tools.stored_value import StoredValue
 from glob import glob
 from pathlib import Path
 
@@ -8,7 +8,7 @@ def main():
 
 def load_stored_values():
     print("Loading stored values...")
-    
+
     sv = StoredValue()
     files = glob("./csvs/Tufts_Dining_Weekly_Summary_Stored_Value*.csv")
     if len(files) == 0:
@@ -17,7 +17,7 @@ def load_stored_values():
         return sv
     
     if len(files) > 1:
-        print("More than one stored value file found")
+        print("More than one stored value file founSd")
         print("Failed to load Stored Value")
         return sv
 

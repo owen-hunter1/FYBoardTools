@@ -1,0 +1,82 @@
+[project]
+name = "report-tool"
+version = "0.1.0"
+requires-python = ">=3.10"
+dependencies = [
+    "altair",
+    "attrs",
+    "beautifulsoup4",
+    "blinker",
+    "cachetools",
+    "camelot-py",
+    "certifi",
+    "cffi",
+    "chardet",
+    "charset-normalizer",
+    "click",
+    "colorama",
+    "colorclass",
+    "compressed-rtf",
+    "cryptography",
+    "easygui",
+    "ebcdic",
+    "et_xmlfile",
+    "extract-msg",
+    "gitdb",
+    "GitPython",
+    "idna",
+    "Jinja2",
+    "jsonschema",
+    "jsonschema-specifications",
+    "lark",
+    "MarkupSafe",
+    "msoffcrypto-tool",
+    "narwhals",
+    "numpy",
+    "olefile",
+    "oletools",
+    "opencv-python-headless",
+    "openpyxl",
+    "packaging",
+    "pandas",
+    "pcodedmp",
+    "pdfminer.six",
+    "pdfplumber",
+    "pillow",
+    "protobuf",
+    "pyarrow",
+    "pycparser",
+    "pydeck",
+    "pyparsing",
+    "pypdf",
+    "pypdfium2",
+    "python-dateutil",
+    "pytz",
+    "red-black-tree-mod",
+    "referencing",
+    "requests",
+    "rpds-py",
+    "RTFDE",
+    "six",
+    "smmap",
+    "soupsieve",
+    "streamlit",
+    "tabulate",
+    "tenacity",
+    "toml",
+    "tornado",
+    "typing_extensions",
+    "tzdata",
+    "tzlocal",
+    "urllib3",
+    "watchdog",
+    "win_unicode_console"
+]
+
+
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.setuptools.packages.find]
+where = ["src"]

@@ -7,3 +7,8 @@ __pycache__/
 *.py[cod]
 __pycache__
 csvs/
+dependency_links.txt
+PKG-INFO
+requires.txt
+SOURCES.txt
+top_level.txt

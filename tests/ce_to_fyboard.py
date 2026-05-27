@@ -1,4 +1,4 @@
-from cash_equiv import CashEquiv
+from report_tools.cash_equiv import CashEquiv
 from glob import glob
 from pathlib import Path
 
