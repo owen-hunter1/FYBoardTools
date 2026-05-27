@@ -1,14 +1,14 @@
-from config import ReportConfig
+from report_tools.config import *
 
-config_test = ReportConfig(
-    output_rows=[],
-    output_columns=[],
-    location_map={},
-    account_map={},    
+config = ReportConfig(
+    output_rows=SV_OUTPUT_ROWS,
+    output_columns=SV_OUTPUT_COLUMNS,
+    location_map=SV_LOCATION_MAP,
+    account_map=SV_ACCOUNT_MAP,    
 )
 
 def config_test():
-    print(config_test)
+    print(config)
 
 
 config_test()

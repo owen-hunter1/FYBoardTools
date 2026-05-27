@@ -38,7 +38,10 @@ class ReportConfig:
     location_map: dict[str, str]
     account_map: dict[str, str]
 
-    location_column: str
-    account_column: str
-    count_column: str
-    amount_column: str
+    def __str__(self):
+        return (
+            f"Output Rows:\n{self.output_rows}\n"
+            f"Output Columns:\n{self.output_columns}\n"
+            f"Location Map:\n{self.location_map}\n"
+            f"Account Map:\n{self.account_map}\n"
+        )
