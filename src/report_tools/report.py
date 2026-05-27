@@ -1,5 +1,5 @@
 import pandas as pd
-import config
+import report_tools.config as config
 
 class Report:
     def __init__(self):
