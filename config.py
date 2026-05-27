@@ -1,3 +1,5 @@
+from dataclasses import dataclass
+
 SV_OUTPUT_COLUMNS = ["JC STUDENT","MEAL MONEY","JC DEPT CARDS","JC FAC/ STAFF"]
 SV_OUTPUT_ROWS = ["CARMICHAEL", "DEWICK/MACP.", "CATERING", "MUGAR CAFÉ", "HILLEL", "COMMONS", "HOTUNG CAFE", "HODGDON ON-THE-RUN", "PAX ET LOX", "TOWER CAFÉ", "KINDLEVAN CAFÉ", "SMFA CAFÉ"]
 
@@ -27,3 +29,16 @@ SV_LOCATION_MAP = {
     "SMFA Cafe": "SMFA CAFÉ",
     "{null}": "Totals"
 }
+
+@dataclass
+class ReportConfig:
+    output_rows: list[str]
+    output_columns: list[str]
+
+    location_map: dict[str, str]
+    account_map: dict[str, str]
+
+    location_column: str
+    account_column: str
+    count_column: str
+    amount_column: str
