@@ -13,6 +13,10 @@ import pandas as pd
 
 import glob
 
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent
+
 def main():
     payment_summary = load_payment_summary()
     payment_details = load_payment_details()

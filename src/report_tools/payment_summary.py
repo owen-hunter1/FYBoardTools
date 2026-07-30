@@ -38,8 +38,7 @@ class PaymentSummary:
         
     # loads payment summary from pdfs
     # store cash and credit counts and amounts
-    # todo: used pdf plumber when I should have used camelot. camelot parses pdf tables better. if regex breaks, it may be worth considering a rewrite using camelot
-    # todo: handle empty pdfs
+    # todo: used pdf plumber when I should have used camelot. camelot parses pdf tables better. if regex breaks, it may be worth considering a rewrite using ca 
     def load_from_pdf(self, path):
         self.count = 0
         self.amount = 0
@@ -48,7 +47,14 @@ class PaymentSummary:
         # stores values in: label, amount, and count
         pattern = re.compile(
             r"""
-            (?P<label>Student\ Cash|Taxable\ Cash|Discover|Mastercard|Visa)\s+
+            (?P<label>
+                Student\ Cash
+                |Taxable\ Cash
+                |Discover
+                |Mastercard
+                |Visa
+                |Student\ Mc-Visa-Discover\ Mx915
+            )\s+
             \$?(?P<amount>[\d,]+\.\d{2})\s+
             (?P<count>[\d,]+)\s+Transactions
             """,
